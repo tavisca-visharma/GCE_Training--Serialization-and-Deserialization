@@ -9,7 +9,7 @@ public class ObjectToJsonConverter {
 		ObjectMapper jsonMapper = new ObjectMapper();
 		String jsonString = null;
 		try {
-			jsonString = jsonMapper.writeValueAsString(object);
+			jsonString = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

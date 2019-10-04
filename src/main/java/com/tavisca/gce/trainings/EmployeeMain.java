@@ -1,11 +1,18 @@
 package com.tavisca.gce.trainings;
 
+import java.io.File;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 
 import com.app.FileUtilites.FileWriterHandler;
 import com.app.dao.EmployeeDao;
 import com.app.entities.Employee;
+import com.app.entities.Employees;
 import com.app.utilities.ObjectToJsonConverter;
 import com.app.utilities.ObjectToXMLConverter;
 
@@ -21,29 +28,31 @@ public class EmployeeMain {
 		Scanner sc = new Scanner(System.in);
 
 		EmployeeDao employeeDao = new EmployeeDao();
-		List<Employee> employees = employeeDao.getAllEmployees();
+		Employees employees = new Employees();
+		List<Employee> emps = employeeDao.getAllEmployees();
+		employees.setEmployees(emps);
 
 		System.out.println("\n\n ============ MENU ============");
 		System.out.println("1. JSON File");
 		System.out.println("2. XML File");
 		System.out.println("3. CSV File");
-		System.out.print("\n Choose the File Type  : ");
+		System.out.print("\nChoose the File Type  : ");
 		int ch = sc.nextInt();
 
 		switch (ch) {
 		case 1:
-			writeToJsonFile(employees);
-			System.out.println("Json File Written Succesfully.");
+			writeToJsonFile(employees.getEmployees());
+			System.out.println("\n\t\tJson File Written Succesfully.");
 			break;
 
 		case 2:
 			writeToXMLFile(employees);
-			System.out.println("XML File Written Succesfully.");
+			System.out.println("\n\t\tXML File Written Succesfully.");
 			break;
 
 		case 3:
-			writeToCsvFile(employees);
-			System.out.println("CSV File Written Succesfully.");
+			writeToCsvFile(employees.getEmployees());
+			System.out.println("\n\t\tCSV File Written Succesfully.");
 			break;
 
 		default:
@@ -66,17 +75,31 @@ public class EmployeeMain {
 
 	}
 
-	static void writeToXMLFile(List<Employee> employees) {
+	static void writeToXMLFile(Employees employees) {
 
-		String xmlDataToWrite = "";
+		Marshaller jaxbMarshaller = null;
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Employees.class);
+			jaxbMarshaller = jaxbContext.createMarshaller();
+			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+			jaxbMarshaller.marshal(employees, System.out);
+			jaxbMarshaller.marshal(employees, new File(DIRECTORY_PATH + "\\" + XML_FILE));
 
-		for (Employee employee : employees) {
-			ObjectToXMLConverter objectToXMLConverter = new ObjectToXMLConverter();
-			xmlDataToWrite += objectToXMLConverter.toXML(employee);
+		} catch (PropertyException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
 		}
 
-		FileWriterHandler fileWriterHandler = new FileWriterHandler();
-		fileWriterHandler.writeDataToFile(xmlDataToWrite, DIRECTORY_PATH + "\\" + XML_FILE);
+//		String xmlDataToWrite = "";
+//
+//		for (Employee employee : employees) {
+//			ObjectToXMLConverter objectToXMLConverter = new ObjectToXMLConverter();
+//			xmlDataToWrite += objectToXMLConverter.toXML(employee);
+//		}
+//
+//		FileWriterHandler fileWriterHandler = new FileWriterHandler();
+//		fileWriterHandler.writeDataToFile(xmlDataToWrite, DIRECTORY_PATH + "\\" + XML_FILE);
 	}
 
 	static void writeToJsonFile(List<Employee> employees) {

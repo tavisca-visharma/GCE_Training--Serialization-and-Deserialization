@@ -1,1 +1,15 @@
-<Employee><id>1</id><firstName>Vishal</firstName><lastName>Sharma</lastName><salary>50000</salary></Employee><Employee><id>2</id><firstName>Chaman</firstName><lastName>Chodhury</lastName><salary>20000</salary></Employee>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<employees>
+    <employee>
+        <id>1</id>
+        <firstName>Vishal</firstName>
+        <lastName>Sharma</lastName>
+        <Salary>50000</Salary>
+    </employee>
+    <employee>
+        <id>2</id>
+        <firstName>Chaman</firstName>
+        <lastName>Chodhury</lastName>
+        <Salary>20000</Salary>
+    </employee>
+</employees>

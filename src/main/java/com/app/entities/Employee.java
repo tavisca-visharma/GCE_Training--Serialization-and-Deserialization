@@ -1,11 +1,25 @@
 package com.app.entities;
 
-public class Employee {
+import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "employee")
+@XmlAccessorType(XmlAccessType.FIELD)
+public class Employee implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
 	int id;
 	String firstName;
 	String lastName;
 	int Salary;
+	
+	public Employee() {
+		
+	}
 
 	public Employee(int id) {
 		this.id = id;
